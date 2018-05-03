@@ -88,5 +88,5 @@ RUN pyenv global 2.7.14
 RUN pip install requests
 RUN git clone https://github.com/p0lr/Harden/ /scripts/harden
 
-# Add local scripts directory and all sub-directories
-COPY scripts /scripts/
+# Un-comment following line to add local scripts directory and all sub-directories, if they exist
+# COPY scripts /scripts/
