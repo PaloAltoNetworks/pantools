@@ -78,6 +78,7 @@ RUN apt-get install php -y
 RUN git clone https://github.com/cpainchaud/pan-configurator/
 
 # Ansible ~76MB
+RUN pyenv global 3.6.5
 RUN pip install ansible
 
 # NMap ~54MB
