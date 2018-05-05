@@ -1,4 +1,5 @@
 # Build with:  docker build -t pantools .
+# Note: I've seen Build fail when using VPN, potentially a firewall blocking file downloads.
 
 ###
 ### The following installs Ubuntu 16.04 LTS codename Xenial
@@ -80,6 +81,8 @@ RUN git clone https://github.com/cpainchaud/pan-configurator/
 # Ansible ~76MB
 RUN pyenv global 3.6.5
 RUN pip install ansible
+# Switch to the correct Python version to run
+RUN echo 'alias ansible="pyenv global 3.6.5; /opt/pyenv/shims/ansible"' >> /root/.bashrc
 
 # NMap ~54MB
 RUN apt-get install nmap -y
