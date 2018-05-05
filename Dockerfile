@@ -79,10 +79,12 @@ RUN apt-get install php -y
 RUN git clone https://github.com/cpainchaud/pan-configurator/
 
 # Ansible ~76MB
-RUN pyenv global 3.6.5
-RUN pip install ansible
-# Switch to the correct Python version to run
-RUN echo 'alias ansible="pyenv global 3.6.5; /opt/pyenv/shims/ansible"' >> /root/.bashrc
+#RUN pyenv global 3.6.5
+#RUN pip install ansible
+#Switch to the correct Python version to run
+#RUN echo 'alias ansible="pyenv global 3.6.5; /opt/pyenv/shims/ansible"' >> /root/.bashrc
+#Just using apt-get appears to work best ;)
+RUN apt-get install ansible -y
 
 # NMap ~54MB
 RUN apt-get install nmap -y
