@@ -78,7 +78,8 @@ RUN apt-get install iperf
 RUN apt-get install php -y
 RUN git clone https://github.com/cpainchaud/pan-configurator/
 
-# Ansible ~76MB
+# Ansible ~27MB
+#~76MB
 #RUN pyenv global 3.6.5
 #RUN pip install ansible
 #Switch to the correct Python version to run
@@ -96,6 +97,12 @@ RUN git clone https://github.com/p0lr/Harden/ /scripts/harden
 
 # My Trace Route ~28MB
 RUN apt-get install mtr -y
+
+# GoPAN Utilities ~20MB
+RUN mkdir /GoPAN
+RUN curl -L https://github.com/zepryspet/GoPAN/raw/master/binaries/linux64bit/GoPAN -o /GoPAN/GoPAN
+RUN chmod 755 /GoPAN/GoPAN
+RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -o /GoPAN/README.md
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
