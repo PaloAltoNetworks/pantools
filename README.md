@@ -1,7 +1,18 @@
 PAN Tools Dockerfile
 ====================
 
-This Dockerfile installs Ubuntu 16.04, Python 3.6.5 and 2.7.14 with PyEnv and many other useful networking tools.
+This Dockerfile installs:
+
+```
+* Ubuntu 16.04
+* Python 2.7.14
+* Python 3.6.5
+* PAN Configurator
+* GoPAN
+* Ansible
+
+ and many other useful networking tools.
+```
 
 If you're new to Docker... install from here: https://www.docker.com/community-edition
 
