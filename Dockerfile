@@ -73,10 +73,13 @@ RUN apt-get install hashalot
 # iPerf ~2MB
 RUN apt-get install iperf
 
-# PAN Configurator ~44MB
-### Doesn't seem to work... Need to setup correct environment variables to get working ???
+# PAN Configurator ~53MB
 RUN apt-get install php -y
-RUN git clone https://github.com/cpainchaud/pan-configurator/
+RUN apt-get install php7.0-curl -y
+RUN apt-get install php7.0-xml -y
+RUN git clone https://github.com/swaschkut/pan-configurator/
+RUN echo 'include_path = ".:/pan-configurator"' >> /etc/php/7.0/cli/php.ini
+RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
 # Ansible ~27MB
 #~76MB
