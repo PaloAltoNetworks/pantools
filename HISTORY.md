@@ -2,6 +2,10 @@ Release History
 ===============
 
 
+May 20, 2018
+-----------
+- Added Speedtest and Netcat
+
 May 8, 2018
 -----------
 - Fixed PAN Configurator dependencies and aliases
