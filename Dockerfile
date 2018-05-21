@@ -61,6 +61,9 @@ RUN apt-get install tcpdump -y
 # Telnet ~1MB ... useful for port testing :)
 RUN apt-get install telnet
 
+# Netcat ~1MB
+RUN apt-get install netcat -y
+
 # NSLookup ~45MB
 RUN apt-get install dnsutils -y
 
@@ -106,6 +109,11 @@ RUN mkdir /GoPAN
 RUN curl -L https://github.com/zepryspet/GoPAN/raw/master/binaries/linux64bit/GoPAN -o /GoPAN/GoPAN
 RUN chmod 755 /GoPAN/GoPAN
 RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -o /GoPAN/README.md
+
+# Speedtest ~1MB
+RUN pyenv global 2.7.14
+RUN pip install speedtest-cli
+
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
