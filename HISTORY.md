@@ -1,6 +1,9 @@
 Release History
 ===============
 
+May 21, 2018
+------------
+- Added PAN-Toolbox scripts
 
 May 20, 2018
 -----------

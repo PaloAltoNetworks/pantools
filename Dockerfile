@@ -114,6 +114,13 @@ RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -
 RUN pyenv global 2.7.14
 RUN pip install speedtest-cli
 
+# PAN-Toolbox ~20MB
+# Example: /pan-toolbox/pan-rcli-nopass.py -fw w.x.y.z -u admin -p admin -cmd "show system info" -stdout
+RUN pyenv global 2.7.14
+RUN pip install paramiko
+RUN git clone https://github.com/workape/pan-toolbox
+RUN chmod +x /pan-toolbox/*.py
+
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
