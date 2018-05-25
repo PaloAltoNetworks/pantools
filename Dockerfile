@@ -121,6 +121,9 @@ RUN pip install paramiko
 RUN git clone https://github.com/workape/pan-toolbox
 RUN chmod +x /pan-toolbox/*.py
 
+# todos and fromdos to convert LF to CR/LF for Windows/Linux/Mac text compatibility ~2MB
+RUN apt-get install tofrodos
+
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
