@@ -67,13 +67,33 @@ RUN apt-get install netcat -y
 # NSLookup ~45MB
 RUN apt-get install dnsutils -y
 
+
 # SNMPWalk ~6MB
 RUN apt-get install snmp -y
+
+# Install Common MIBS ~25MB
+RUN apt-get install snmp-mibs-downloader -y
+
+# Install PAN specific MIBs from PAN-OS 8.1 ~1MB
+RUN apt-get install unzip
+RUN wget https://www.paloaltonetworks.com/content/dam/pan/en_US/assets/zip/technical-documentation/snmp-mib-modules/PAN-MIB-MODULES-8.1.zip -O /tmp/temp.zip
+RUN unzip /tmp/temp.zip -d /tmp
+RUN rm /tmp/temp.zip
+RUN mv /tmp/*.my /usr/share/snmp/mibs
+RUN rm /tmp/*.md5
+RUN sed -i 's/mibs :/# mibs :/g' /etc/snmp/snmp.conf
+RUN echo "mibs +PAN-COMMON-MIB" >> /etc/snmp/snmp.conf
+RUN echo "mibs +PAN-ENTITY-EXT-MIB" >> /etc/snmp/snmp.conf
+RUN echo "mibs +PAN-LC-MIB" >> /etc/snmp/snmp.conf
+RUN echo "mibs +PAN-TRAPS" >> /etc/snmp/snmp.conf
+
 
 # sha256sum and md5sum ~1MB
 RUN apt-get install hashalot
 
 # iPerf ~2MB
+# iperf -s -p 8888 : Server listen on port 8888 (Run Docker with -p 8888:8888)
+# iperf -c w.x.y.z -p 8888 -n 1M  : Send to server w.x.y.z 1MB via TCP
 RUN apt-get install iperf
 
 # PAN Configurator ~53MB

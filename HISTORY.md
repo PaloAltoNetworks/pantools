@@ -1,6 +1,14 @@
 Release History
 ===============
 
+May 28, 2018
+------------
+- Added standard and PAN MIBs for snmpwalk with OID text format support.
+
+May 25, 2018
+------------
+- Save all files as CR/LF for Windows compatibility
+
 May 21, 2018
 ------------
 - Added PAN-Toolbox scripts
