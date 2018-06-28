@@ -114,6 +114,7 @@ RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 RUN apt-get install ansible -y
 
 # NMap ~54MB
+# Examples: https://www.cyberciti.biz/security/nmap-command-examples-tutorials/
 RUN apt-get install nmap -y
 
 # Harden Script ~3MB
@@ -143,6 +144,20 @@ RUN chmod +x /pan-toolbox/*.py
 
 # todos and fromdos to convert LF to CR/LF for Windows/Linux/Mac text compatibility ~2MB
 RUN apt-get install tofrodos
+
+# Hping3 ~5MB
+# Examples: http://0daysecurity.com/articles/hping3_examples.html
+# Note: Docker seems to rate/limit/drop flood commands
+RUN apt-get install hping3 -y
+
+# CPS Bot ~10MB
+# Script to SNMP Poll Active CPS numbers for each Zone
+RUN pip install pudb
+RUN git clone https://github.com/ipzero209/cps_bot
+RUN chmod +x /cps_bot/cps_bot.py
+# Fix script to run with PyEnv
+RUN sed -i 's/python/env python/' /cps_bot/cps_bot.py
+
 
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist

@@ -1,6 +1,11 @@
 Release History
 ===============
 
+June 27, 2018
+------------
+- Added hping3 utility
+- Added CPS Bot script
+
 May 28, 2018
 ------------
 - Added standard and PAN MIBs for snmpwalk with OID text format support.
