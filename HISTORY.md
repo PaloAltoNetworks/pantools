@@ -1,6 +1,11 @@
 Release History
 ===============
 
+November 26, 2018
+-----------------
+- Added Microsoft PowerShell with Azure Modules
+- Fixed changes to MIB sourcefiles
+
 June 27, 2018
 ------------
 - Added hping3 utility
