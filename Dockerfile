@@ -78,9 +78,9 @@ RUN apt-get install snmp-mibs-downloader -y
 RUN apt-get install unzip
 RUN wget https://www.paloaltonetworks.com/content/dam/pan/en_US/assets/zip/technical-documentation/snmp-mib-modules/PAN-MIB-MODULES-8.1.zip -O /tmp/temp.zip
 RUN unzip /tmp/temp.zip -d /tmp
+RUN mv /tmp/PAN-MIB-MODULES-8.1/*.my /usr/share/snmp/mibs
 RUN rm /tmp/temp.zip
-RUN mv /tmp/*.my /usr/share/snmp/mibs
-RUN rm /tmp/*.md5
+RUN rm /tmp/PAN-MIB-MODULES-8.1 -rf
 RUN sed -i 's/mibs :/# mibs :/g' /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-COMMON-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-ENTITY-EXT-MIB" >> /etc/snmp/snmp.conf
@@ -158,7 +158,18 @@ RUN chmod +x /cps_bot/cps_bot.py
 # Fix script to run with PyEnv
 RUN sed -i 's/python/env python/' /cps_bot/cps_bot.py
 
-
+# Microsoft Powershell (pwsh) with Azure Module ~60MB
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell_6.1.0-1.ubuntu.16.04_amd64.deb
+RUN apt-get install -y liblttng-ust0
+RUN dpkg -i powershell_6.1.0-1.ubuntu.16.04_amd64.deb
+RUN rm powershell_6.1.0-1.ubuntu.16.04_amd64.deb
+RUN mkdir /root/.config/powershell
+RUN echo "# Installing Modules can be blocked by some Firewalls" >> /root/.config/powershell/profile.ps1
+RUN echo "Install-Module -Force Az" >> /root/.config/powershell/profile.ps1
+RUN echo "Import-Module Az" >> /root/.config/powershell/profile.ps1
+RUN echo "***** Running Powershell... Don't be alarmed by Display Issues :) *****"
+RUN pwsh
+RUN echo "Enable-AzureRmAlias" > /root/.config/powershell/profile.ps1
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
