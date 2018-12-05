@@ -27,13 +27,13 @@ RUN apt-get update -q \
 ENV HOME=/root PYENV_ROOT=/opt/pyenv PATH=/opt/pyenv/shims:/opt/pyenv/bin:$PATH
 RUN curl https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
-### Python 2.7.14 ~121MB
-RUN pyenv install 2.7.14
+### Python 2.7.15 ~121MB
+RUN pyenv install 2.7.15
 
-### Python 3.6.5 ~177MB
-RUN pyenv install 3.6.5
+### Python 3.6.7 ~177MB
+RUN pyenv install 3.6.7
 
-RUN pyenv global 3.6.5 2.7.14
+RUN pyenv global 3.6.7 2.7.15
 
 
 ###
@@ -106,10 +106,10 @@ RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
 # Ansible ~27MB
 #~76MB
-#RUN pyenv global 3.6.5
+#RUN pyenv global 3.6.7
 #RUN pip install ansible
 #Switch to the correct Python version to run
-#RUN echo 'alias ansible="pyenv global 3.6.5; /opt/pyenv/shims/ansible"' >> /root/.bashrc
+#RUN echo 'alias ansible="pyenv global 3.6.7; /opt/pyenv/shims/ansible"' >> /root/.bashrc
 #Just using apt-get appears to work best ;)
 RUN apt-get install ansible -y
 
@@ -118,7 +118,7 @@ RUN apt-get install ansible -y
 RUN apt-get install nmap -y
 
 # Harden Script ~3MB
-RUN pyenv global 2.7.14
+RUN pyenv global 2.7.15
 RUN pip install requests
 RUN git clone https://github.com/p0lr/Harden/ /scripts/harden
 
@@ -132,12 +132,12 @@ RUN chmod 755 /GoPAN/GoPAN
 RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -o /GoPAN/README.md
 
 # Speedtest ~1MB
-RUN pyenv global 2.7.14
+RUN pyenv global 2.7.15
 RUN pip install speedtest-cli
 
 # PAN-Toolbox ~20MB
 # Example: /pan-toolbox/pan-rcli-nopass.py -fw w.x.y.z -u admin -p admin -cmd "show system info" -stdout
-RUN pyenv global 2.7.14
+RUN pyenv global 2.7.15
 RUN pip install paramiko
 RUN git clone https://github.com/workape/pan-toolbox
 RUN chmod +x /pan-toolbox/*.py
@@ -170,6 +170,30 @@ RUN echo "Import-Module Az" >> /root/.config/powershell/profile.ps1
 RUN echo "***** Running Powershell... Don't be alarmed by Display Issues :) *****"
 RUN pwsh
 RUN echo "Enable-AzureRmAlias" > /root/.config/powershell/profile.ps1
+
+# Microsoft Azure CLI (az) ~170MB
+RUN pip install azure-cli
+# apt-get install below works but uses ~360MB... using PIP instead
+#RUN apt-get install apt-transport-https lsb-release software-properties-common -y
+#ENV AZ_REPO=xenial
+#RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+#    tee /etc/apt/sources.list.d/azure-cli.list
+#RUN apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
+#     --keyserver packages.microsoft.com \
+#     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+#RUN apt-get update
+#RUN apt-get install azure-cli
+
+# Terraform 0.11 ~90MB
+ENV tf_ver=0.11.10
+RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
+    unzip terraform.zip && \
+    install terraform /usr/local/bin/terraform-0.11 && \
+    rm -rf terraform.zip terraform && \
+    mv /usr/local/bin/terraform-0.11 /usr/local/bin/terraform
+RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
+RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
+
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
