@@ -1,6 +1,12 @@
 Release History
 ===============
 
+December 4, 2018
+-----------------
+- Updated Python to 2.7.15 and 3.6.7
+- Added Microsoft Azure CLI
+- Added Terraform
+
 November 26, 2018
 -----------------
 - Added Microsoft PowerShell with Azure Modules
