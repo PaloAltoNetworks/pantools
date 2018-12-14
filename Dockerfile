@@ -1,11 +1,8 @@
 # Build with:  docker build -t pantools .
-# Note: I've seen Build fail when using VPN, potentially a firewall blocking file downloads.
-
-###
-### The following installs Ubuntu 16.04 LTS codename Xenial
-###
-### Ubuntu ~402MB
-###
+# The following installs Ubuntu 16.04 LTS codename Xenial
+#
+# Ubuntu ~402MB
+#
 
 FROM ubuntu:xenial
 
@@ -104,18 +101,27 @@ RUN git clone https://github.com/swaschkut/pan-configurator/
 RUN echo 'include_path = ".:/pan-configurator"' >> /etc/php/7.0/cli/php.ini
 RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
-# Ansible ~27MB
-#~76MB
-#RUN pyenv global 3.6.7
-#RUN pip install ansible
-#Switch to the correct Python version to run
-#RUN echo 'alias ansible="pyenv global 3.6.7; /opt/pyenv/shims/ansible"' >> /root/.bashrc
-#Just using apt-get appears to work best ;)
-RUN apt-get install ansible -y
+# Ansible ~76MB
+#RUN echo 'alias ansible="pyenv global 2.7.15; /opt/pyenv/shims/ansible"' >> /root/.bashrc
+ENV ANSIBLE_VERSION=2.7.4
+RUN pyenv global 2.7.15
+RUN pip install ansible==${ANSIBLE_VERSION} \
+        pandevice \
+        pan-python \
+        xmltodict \
+        jsonschema 
+RUN mkdir /etc/ansible
+RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg -O /etc/ansible/ansible.cfg
+RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/hosts -O /etc/ansible/hosts
+RUN ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+RUN echo '[defaults]' >> /etc/ansible/ansible.cfg
+RUN echo 'library = /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/' >> /etc/ansible/ansible.cfg
+RUN ln -s /opt/pyenv/shims/python /usr/bin/python
 
 # NMap ~54MB
 # Examples: https://www.cyberciti.biz/security/nmap-command-examples-tutorials/
-RUN apt-get install nmap -y
+# As of Dec 2018 this was causing a problem with Ansible libraries, so Ansible + NMap don't seem compatible together and may be an issue with PyEnv
+#RUN apt-get install nmap -y
 
 # Harden Script ~3MB
 RUN pyenv global 2.7.15
@@ -194,6 +200,14 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
 RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 
+# Clean-up
+RUN apt-get -y autoremove && \
+    apt-get -y autoclean && \ 
+    apt-get -y clean all && \
+    rm -rf /root/.cache/pip && \
+    rm -rf /root/.pip/cache && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt
 
 # Un-comment following line to add local scripts directory and all sub-directories, if they exist
 # COPY scripts /scripts/
