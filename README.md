@@ -7,10 +7,10 @@ This Dockerfile installs:
 * Ubuntu 16.04
 * Python 2.7.15
 * Python 3.6.7
+* Ansible 2.7.4
+* Terraform 0.11.10
 * PAN Configurator
 * GoPAN
-* Ansible
-* Terraform
 
  and many other useful networking tools.
 ```
@@ -36,5 +36,5 @@ pyenv global 3.6.7
 All changes within a container are lost on exit when using 'docker run'.
 To map a host directory to be shared with the container:
 ```php
-docker run -it -v /Users/username/Documents/Scripts:/hostscripts pantools
+docker run -it -v /Users/username/Documents/Scripts:/scripts pantools
 ```
