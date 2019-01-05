@@ -64,6 +64,9 @@ RUN apt-get install netcat -y
 # NSLookup ~45MB
 RUN apt-get install dnsutils -y
 
+# Lynx Web Browser ~8MB
+RUN apt-get install lynx -y
+
 
 # SNMPWalk ~6MB
 RUN apt-get install snmp -y
@@ -118,9 +121,27 @@ RUN echo '[defaults]' >> /etc/ansible/ansible.cfg
 RUN echo 'library = /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/' >> /etc/ansible/ansible.cfg
 RUN ln -s /opt/pyenv/shims/python /usr/bin/python
 
-# NMap ~54MB
-# Examples: https://www.cyberciti.biz/security/nmap-command-examples-tutorials/
-# As of Dec 2018 this was causing a problem with Ansible libraries, so Ansible + NMap don't seem compatible together and may be an issue with PyEnv
+# NMap 7.70 ~28MB
+RUN curl -fL -o /tmp/nmap.tar.bz2 \
+         https://nmap.org/dist/nmap-7.70.tar.bz2 \
+ && tar -xjf /tmp/nmap.tar.bz2 -C /tmp \
+ && cd /tmp/nmap* \
+ && ./configure \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --mandir=/usr/share/man \
+        --infodir=/usr/share/info \
+        --without-zenmap \
+        --without-nmap-update \
+        --with-openssl=/usr/lib \
+        --with-liblua=/usr/include \
+ && make \
+ && make install \
+ && rm -rf /var/cache/apk/* \
+           /tmp/nmap*
+# NMap 7.01 was causing a problem with Ansible libraries and may be an issue with PyEnv as well...
+# NMap 7.70 installation seems to work well with NMap and Ansible
+# As of Jan 2019... below installs Nmap 7.01
 #RUN apt-get install nmap -y
 
 # Harden Script ~3MB
