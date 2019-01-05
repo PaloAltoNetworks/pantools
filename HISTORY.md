@@ -9,7 +9,7 @@ January 4, 2019
 December 13, 2018
 -----------------
 - Fixed Ansible and load PAN Library
-- Remarked out NMap 7.0 which seems incompatible with Ansible library/install
+- Remarked out NMap 7.01 which seems incompatible with Ansible library/install
 
 December 4, 2018
 ----------------
