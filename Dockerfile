@@ -221,6 +221,17 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
 RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 
+# Google Cloud SDK ~140MB
+ENV GCLOUD_VERSION 230.0.0
+RUN curl --silent -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCLOUD_VERSION-linux-x86_64.tar.gz -o google-cloud-sdk.tar.gz \
+ && tar xzf google-cloud-sdk.tar.gz \
+ && rm google-cloud-sdk.tar.gz \
+ && google-cloud-sdk/install.sh --usage-reporting=true --path-update=true --bash-completion=true --rc-path=/.bashrc \
+ # Disable gcloud components Update Check
+ && google-cloud-sdk/bin/gcloud config set --installation component_manager/disable_update_check true
+RUN echo 'alias gcloud="/google-cloud-sdk/bin/gcloud"' >> /root/.bashrc
+RUN echo 'alias gsutil="/google-cloud-sdk/bin/gsutil"' >> /root/.bashrc
+
 # Clean-up
 RUN apt-get -y autoremove && \
     apt-get -y autoclean && \ 
