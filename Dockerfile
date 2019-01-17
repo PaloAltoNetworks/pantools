@@ -232,6 +232,9 @@ RUN curl --silent -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/
 RUN echo 'alias gcloud="/google-cloud-sdk/bin/gcloud"' >> /root/.bashrc
 RUN echo 'alias gsutil="/google-cloud-sdk/bin/gsutil"' >> /root/.bashrc
 
+# AWS CLI ~60MB
+RUN pip install awscli awsebcli
+
 # Clean-up
 RUN apt-get -y autoremove && \
     apt-get -y autoclean && \ 
