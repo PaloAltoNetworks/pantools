@@ -1,6 +1,10 @@
 Release History
 ===============
 
+January 16, 2019
+---------------
+- Added Google Cloud SDK 230.0.0
+
 January 4, 2019
 ---------------
 - Added Lynx web browser
