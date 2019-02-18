@@ -1,6 +1,13 @@
 Release History
 ===============
 
+February 18, 2019
+----------------
+- Added Slurm Network Monitor
+- Added NMon System Monitor
+- Added iostat Disk Monitor
+- Added Aria2 Multi-Connection Download 
+
 January 16, 2019
 ---------------
 - Added Google Cloud SDK 230.0.0
