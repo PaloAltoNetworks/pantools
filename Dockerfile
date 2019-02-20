@@ -96,7 +96,7 @@ RUN apt-get install nmon -y
 # Example: Disk Queue size: iostat -x
 RUN apt-get install sysstat -y
 
-# Aria2 Multi-threaded download ~xxMB
+# Aria2 Multi-threaded download ~6MB
 # Example download with 8 connections: aria2c -x 8 http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso 
 RUN apt-get install aria2 -y
 
@@ -107,13 +107,13 @@ RUN apt-get install snmp -y
 # Install Common MIBS ~25MB
 RUN apt-get install snmp-mibs-downloader -y
 
-# Install PAN specific MIBs from PAN-OS 8.1 ~1MB
+# Install PAN specific MIBs from PAN-OS 9.0 ~1MB
 RUN apt-get install unzip
-RUN wget https://www.paloaltonetworks.com/content/dam/pan/en_US/assets/zip/technical-documentation/snmp-mib-modules/PAN-MIB-MODULES-8.1.zip -O /tmp/temp.zip
+RUN wget https://docs.paloaltonetworks.com/content/dam/techdocs/en_US/zip/snmp-mib/pan-90-snmp-mib-modules.zip -O /tmp/temp.zip
 RUN unzip /tmp/temp.zip -d /tmp
-RUN mv /tmp/PAN-MIB-MODULES-8.1/*.my /usr/share/snmp/mibs
+RUN mv /tmp/*.my /usr/share/snmp/mibs
 RUN rm /tmp/temp.zip
-RUN rm /tmp/PAN-MIB-MODULES-8.1 -rf
+RUN rm /tmp/*.md5
 RUN sed -i 's/mibs :/# mibs :/g' /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-COMMON-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-ENTITY-EXT-MIB" >> /etc/snmp/snmp.conf
