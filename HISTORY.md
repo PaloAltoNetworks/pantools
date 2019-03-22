@@ -1,6 +1,10 @@
 Release History
 ===============
 
+March 21, 2019
+--------------
+- Added Shodan
+
 February 19, 2019
 -----------------
 - Updated SNMP MIB's for PAN-OS 9.0

@@ -250,6 +250,10 @@ RUN echo 'alias gsutil="/google-cloud-sdk/bin/gsutil"' >> /root/.bashrc
 # AWS CLI ~60MB
 RUN pip install awscli awsebcli
 
+# Shodan ~6MB
+# https://cli.shodan.io/
+RUN pip install shodan
+
 # Clean-up
 RUN apt-get -y autoremove && \
     apt-get -y autoclean && \ 
