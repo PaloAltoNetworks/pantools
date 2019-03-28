@@ -1,10 +1,8 @@
 # Build with:  docker build -t pantools .
-# The following installs Ubuntu 16.04 LTS codename Xenial
-#
-# Ubuntu ~402MB
+# The following installs Ubuntu 18.04 LTS codename Bionic ~382MB
 #
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 RUN apt-get update -q \
     && apt-get upgrade -q -y \
@@ -24,13 +22,13 @@ RUN apt-get update -q \
 ENV HOME=/root PYENV_ROOT=/opt/pyenv PATH=/opt/pyenv/shims:/opt/pyenv/bin:$PATH
 RUN curl https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
-### Python 2.7.15 ~121MB
-RUN pyenv install 2.7.15
+### Python 2.7.16 ~121MB
+RUN pyenv install 2.7.16
 
-### Python 3.6.7 ~177MB
-RUN pyenv install 3.6.7
+### Python 3.6.8 ~177MB
+RUN pyenv install 3.6.8
 
-RUN pyenv global 3.6.7 2.7.15
+RUN pyenv global 3.6.8 2.7.16
 
 
 ###
@@ -71,7 +69,7 @@ RUN apt-get install hashalot
 RUN apt-get install mtr -y
 
 # Speedtest ~1MB
-RUN pyenv global 2.7.15
+RUN pyenv global 2.7.16
 RUN pip install speedtest-cli
 
 # todos and fromdos to convert LF to CR/LF for Windows/Linux/Mac text compatibility ~2MB
@@ -80,6 +78,8 @@ RUN apt-get install tofrodos
 # Hping3 ~5MB
 # Examples: http://0daysecurity.com/articles/hping3_examples.html
 # Note: Docker seems to rate/limit/drop flood commands
+# ENV fixes prompting in Ubuntu 18.04
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install hping3 -y
 
 # Lynx Web Browser ~8MB
@@ -128,16 +128,16 @@ RUN apt-get install iperf
 
 # PAN Configurator ~53MB
 RUN apt-get install php -y
-RUN apt-get install php7.0-curl -y
-RUN apt-get install php7.0-xml -y
+RUN apt-get install php7.2-curl -y
+RUN apt-get install php7.2-xml -y
 RUN git clone https://github.com/swaschkut/pan-configurator/
-RUN echo 'include_path = ".:/pan-configurator"' >> /etc/php/7.0/cli/php.ini
+RUN echo 'include_path = ".:/pan-configurator"' >> /etc/php/7.2/cli/php.ini
 RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
 # Ansible ~76MB
-#RUN echo 'alias ansible="pyenv global 2.7.15; /opt/pyenv/shims/ansible"' >> /root/.bashrc
-ENV ANSIBLE_VERSION=2.7.4
-RUN pyenv global 2.7.15
+#RUN echo 'alias ansible="pyenv global 2.7.16; /opt/pyenv/shims/ansible"' >> /root/.bashrc
+ENV ANSIBLE_VERSION=2.7.9
+RUN pyenv global 2.7.16
 RUN pip install ansible==${ANSIBLE_VERSION} \
         pandevice \
         pan-python \
@@ -175,7 +175,7 @@ RUN curl -fL -o /tmp/nmap.tar.bz2 \
 #RUN apt-get install nmap -y
 
 # Harden Script ~3MB
-RUN pyenv global 2.7.15
+RUN pyenv global 2.7.16
 RUN pip install requests
 RUN git clone https://github.com/p0lr/Harden/ /scripts/harden
 
@@ -187,7 +187,7 @@ RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -
 
 # PAN-Toolbox ~20MB
 # Example: /pan-toolbox/pan-rcli-nopass.py -fw w.x.y.z -u admin -p admin -cmd "show system info" -stdout
-RUN pyenv global 2.7.15
+RUN pyenv global 2.7.16
 RUN pip install paramiko
 RUN git clone https://github.com/workape/pan-toolbox
 RUN chmod +x /pan-toolbox/*.py
@@ -201,10 +201,10 @@ RUN chmod +x /cps_bot/cps_bot.py
 RUN sed -i 's/python/env python/' /cps_bot/cps_bot.py
 
 # Microsoft Powershell (pwsh) with Azure Module ~60MB
-RUN wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell_6.1.0-1.ubuntu.16.04_amd64.deb
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.3/powershell_6.1.3-1.ubuntu.18.04_amd64.deb
 RUN apt-get install -y liblttng-ust0
-RUN dpkg -i powershell_6.1.0-1.ubuntu.16.04_amd64.deb
-RUN rm powershell_6.1.0-1.ubuntu.16.04_amd64.deb
+RUN dpkg -i powershell_6.1.3-1.ubuntu.18.04_amd64.deb
+RUN rm powershell_6.1.3-1.ubuntu.18.04_amd64.deb
 RUN mkdir /root/.config/powershell
 RUN echo "# Installing Modules can be blocked by some Firewalls" >> /root/.config/powershell/profile.ps1
 RUN echo "Install-Module -Force Az" >> /root/.config/powershell/profile.ps1
@@ -227,7 +227,7 @@ RUN pip install azure-cli
 #RUN apt-get install azure-cli
 
 # Terraform 0.11 ~90MB
-ENV tf_ver=0.11.10
+ENV tf_ver=0.11.13
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     unzip terraform.zip && \
     install terraform /usr/local/bin/terraform-0.11 && \
@@ -237,7 +237,7 @@ RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 
 # Google Cloud SDK ~140MB
-ENV GCLOUD_VERSION 230.0.0
+ENV GCLOUD_VERSION 240.0.0
 RUN curl --silent -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCLOUD_VERSION-linux-x86_64.tar.gz -o google-cloud-sdk.tar.gz \
  && tar xzf google-cloud-sdk.tar.gz \
  && rm google-cloud-sdk.tar.gz \

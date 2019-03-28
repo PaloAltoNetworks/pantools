@@ -1,8 +1,15 @@
 Release History
 ===============
 
-March 27, 2019
+March 28, 2019
 --------------
+- Updated Ubuntu to 18.04 Bionic
+- Updated Python to 2.7.16 and 3.6.8
+- Updated Ansible to 2.7.9
+- Updated Terraform to 0.11.13
+- Updated Google Cloud SDK to 240.0.0
+- Updated Powershell to 6.1.3
+- Updated Pan Configurator/PHP to 7.2 
 - Added support for PAN-FCA Flexible Cloud Automation
 
 March 21, 2019

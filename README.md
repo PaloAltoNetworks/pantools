@@ -4,14 +4,14 @@ PAN Tools Dockerfile
 This Dockerfile installs:
 
 ```
-* Ubuntu 16.04
-* Python 2.7.15
-* Python 3.6.7
-* Ansible 2.7.4
-* Terraform 0.11.10
+* Ubuntu 18.04 Bionic
+* Python 2.7.16
+* Python 3.6.8
+* Ansible 2.7.9
+* Terraform 0.11.13
 * Azure CLI
 * AWS CLI
-* Google SDK 230.0.0
+* Google SDK 240.0.0
 * PAN Configurator
 * GoPAN
 
@@ -32,8 +32,8 @@ docker run -it pantools
 
 Within the container switch Python versions:
 ```php
-pyenv global 2.7.15
-pyenv global 3.6.7
+pyenv global 2.7.16
+pyenv global 3.6.8
 ```
 
 All changes within a container are lost on exit when using 'docker run'.
