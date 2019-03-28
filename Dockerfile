@@ -254,6 +254,10 @@ RUN pip install awscli awsebcli
 # https://cli.shodan.io/
 RUN pip install shodan
 
+# Support for PAN-FCA Flexible Cloud Automation ~1MB
+RUN pip install requests-toolbelt
+
+
 # Clean-up
 RUN apt-get -y autoremove && \
     apt-get -y autoclean && \ 

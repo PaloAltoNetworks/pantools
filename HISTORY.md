@@ -1,6 +1,10 @@
 Release History
 ===============
 
+March 27, 2019
+--------------
+- Added support for PAN-FCA Flexible Cloud Automation
+
 March 21, 2019
 --------------
 - Added Shodan
