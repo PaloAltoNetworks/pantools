@@ -32,7 +32,9 @@ docker tag ajoldham/pantools pantools
 ```php
 docker build -t pantools .
 ```
+
 <br>
+
 Run with:
 ```php
 docker run -it pantools
