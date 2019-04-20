@@ -22,13 +22,28 @@ RUN apt-get update -q \
 ENV HOME=/root PYENV_ROOT=/opt/pyenv PATH=/opt/pyenv/shims:/opt/pyenv/bin:$PATH
 RUN curl https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
-### Python 2.7.16 ~121MB
-RUN pyenv install 2.7.16
+# Define Python Versions to use
+ENV PY2VER 2.7.16
+ENV PY3VER 3.6.8
 
-### Python 3.6.8 ~177MB
-RUN pyenv install 3.6.8
+### Python 2 ~128MB
+### RUN pyenv install $PY2VER  // Need to test replacing Py vers with ENV vars :)
+RUN pyenv install $PY2VER
 
-RUN pyenv global 3.6.8 2.7.16
+### Python 3 ~183MB
+RUN pyenv install $PY3VER
+
+#Likely need to install libffi-dev when we want to move to Python 3.7 to get installed/working :)
+#RUN apt-get install libffi-dev
+#RUN pyenv install 3.7.3
+
+# Upgrade Python 3 PIP
+RUN pyenv global $PY3VER
+RUN pip3 install --upgrade pip
+
+# Upgrade Python 2 PIP and leave Python 2 Active/Default
+RUN pyenv global $PY2VER
+RUN pip2 install --upgrade pip
 
 
 ###
@@ -41,13 +56,16 @@ RUN apt-get install vim-tiny -y
 # Nano Text editor ~1MB
 RUN apt-get install nano
 
+# tree Directory output ~1MB
+RUN apt-get install tree
+
 # Ping ~2MB
 RUN apt-get install iputils-ping -yq
 
 # Traceroute ~1MB
 RUN apt-get install traceroute
 
-# ifconfig ~1MB
+# ifconfig, netstat ~1MB
 RUN apt-get install net-tools
 
 # TCPDump ~3MB
@@ -69,7 +87,6 @@ RUN apt-get install hashalot
 RUN apt-get install mtr -y
 
 # Speedtest ~1MB
-RUN pyenv global 2.7.16
 RUN pip install speedtest-cli
 
 # todos and fromdos to convert LF to CR/LF for Windows/Linux/Mac text compatibility ~2MB
@@ -99,6 +116,9 @@ RUN apt-get install sysstat -y
 # Aria2 Multi-threaded download ~6MB
 # Example download with 8 connections: aria2c -x 8 http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso 
 RUN apt-get install aria2 -y
+
+# Midnight Commander mc ~10MB
+RUN apt-get install mc -y
 
 
 # SNMPWalk ~6MB
@@ -137,7 +157,6 @@ RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 # Ansible ~76MB
 #RUN echo 'alias ansible="pyenv global 2.7.16; /opt/pyenv/shims/ansible"' >> /root/.bashrc
 ENV ANSIBLE_VERSION=2.7.9
-RUN pyenv global 2.7.16
 RUN pip install ansible==${ANSIBLE_VERSION} \
         pandevice \
         pan-python \
@@ -175,9 +194,14 @@ RUN curl -fL -o /tmp/nmap.tar.bz2 \
 #RUN apt-get install nmap -y
 
 # Harden Script ~3MB
-RUN pyenv global 2.7.16
 RUN pip install requests
 RUN git clone https://github.com/p0lr/Harden/ /scripts/harden
+
+# PANOS to Terraform Conversion Script ~1MB  // Need to test! :)
+# RUN pyenv global $PY3VER
+# RUN pip install pandevice
+# RUN git clone https://github.com/freimer/import-pan /scripts/pancfg-to-tf
+# RUN pyenv global $PY2VER
 
 # GoPAN Utilities ~20MB
 RUN mkdir /GoPAN
@@ -187,7 +211,6 @@ RUN curl -L https://raw.githubusercontent.com/zepryspet/GoPAN/master/README.md -
 
 # PAN-Toolbox ~20MB
 # Example: /pan-toolbox/pan-rcli-nopass.py -fw w.x.y.z -u admin -p admin -cmd "show system info" -stdout
-RUN pyenv global 2.7.16
 RUN pip install paramiko
 RUN git clone https://github.com/workape/pan-toolbox
 RUN chmod +x /pan-toolbox/*.py
@@ -223,7 +246,6 @@ RUN pip install azure-cli
 #RUN apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
 #     --keyserver packages.microsoft.com \
 #     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
-#RUN apt-get update
 #RUN apt-get install azure-cli
 
 # Terraform 0.11 ~90MB

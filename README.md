@@ -18,9 +18,15 @@ This Dockerfile installs:
  and many other useful networking tools.
 ```
 
-If you're new to Docker... install from here: https://www.docker.com/community-edition
 
-Build with:  
+Download pre-built image from Docker Hub with:
+
+```php
+docker pull ajoldham/pantools
+docker tag ajoldham/pantools pantools
+```
+
+Build from source with:  
 ```php
 docker build -t pantools .
 ```
@@ -34,10 +40,4 @@ Within the container switch Python versions:
 ```php
 pyenv global 2.7.16
 pyenv global 3.6.8
-```
-
-All changes within a container are lost on exit when using 'docker run'.
-To map a host directory to be shared with the container:
-```php
-docker run -it -v /Users/username/Documents/Scripts:/scripts pantools
 ```

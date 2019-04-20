@@ -1,6 +1,12 @@
 Release History
 ===============
 
+April 20, 2019
+--------------
+- Added Midnight Commander File Manager
+- Added tree command
+- Upgraded pip for Python 2 and Python 3
+
 March 28, 2019
 --------------
 - Updated Ubuntu to 18.04 Bionic
