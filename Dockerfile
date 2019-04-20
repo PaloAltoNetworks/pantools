@@ -27,7 +27,6 @@ ENV PY2VER 2.7.16
 ENV PY3VER 3.6.8
 
 ### Python 2 ~128MB
-### RUN pyenv install $PY2VER  // Need to test replacing Py vers with ENV vars :)
 RUN pyenv install $PY2VER
 
 ### Python 3 ~183MB
