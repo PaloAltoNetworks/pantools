@@ -26,11 +26,13 @@ docker pull ajoldham/pantools
 docker tag ajoldham/pantools pantools
 ```
 
-Build from source with:  
+-or-
+
+ Build from sources with:  
 ```php
 docker build -t pantools .
 ```
-
+<br>
 Run with:
 ```php
 docker run -it pantools
