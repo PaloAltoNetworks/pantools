@@ -1,6 +1,10 @@
 Release History
 ===============
 
+May 3, 2019
+--------------
+- Added support for Ansible module panos_set
+
 April 20, 2019
 --------------
 - Added Midnight Commander File Manager

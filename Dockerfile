@@ -168,6 +168,8 @@ RUN ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 RUN echo '[defaults]' >> /etc/ansible/ansible.cfg
 RUN echo 'library = /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/' >> /etc/ansible/ansible.cfg
 RUN ln -s /opt/pyenv/shims/python /usr/bin/python
+# Include panos_set Module
+RUN curl -L https://raw.githubusercontent.com/ansible/ansible/fb9720429119cd56a7dde6d06600a082b4ab19c3/lib/ansible/modules/network/panos/_panos_set.py -o /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/panos_set.py
 
 # NMap 7.70 ~28MB
 RUN curl -fL -o /tmp/nmap.tar.bz2 \
