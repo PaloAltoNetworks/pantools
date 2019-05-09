@@ -14,5 +14,5 @@ services:
         volumes:
             - "./:/pwd"
 
-        ### Allows to automatically start with Docker
+        # Allows to automatically start with Docker
         restart: always
