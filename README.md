@@ -45,3 +45,8 @@ Within the container switch Python versions:
 pyenv global 2.7.16
 pyenv global 3.6.8
 ```
+
+Can run as a SSHD service by uncommenting out lines in the Dockerfile and running with:
+```php
+docker-compose up -d
+```
