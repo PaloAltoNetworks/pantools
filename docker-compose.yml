@@ -13,3 +13,6 @@ services:
         # Maps the Present Working Directory to Container /pwd
         volumes:
             - "./:/pwd"
+
+        ### Allows to automatically start with Docker
+        restart: always

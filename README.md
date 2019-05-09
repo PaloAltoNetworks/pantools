@@ -48,5 +48,5 @@ pyenv global 3.6.8
 
 Can run as a SSHD service by uncommenting out lines in the Dockerfile and running with:
 ```php
-docker-compose up -d
+docker-compose up
 ```
