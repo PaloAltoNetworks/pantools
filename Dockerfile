@@ -292,8 +292,10 @@ RUN pip install requests-toolbelt
 # RUN echo 'root:paloalto' | chpasswd
 # RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 # RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-# ENV NOTVISIBLE "in users profile"
-# RUN echo "export VISIBLE=now" >> /etc/profile
+### SSH into Docker ignores ENV variables... need to save into /etc/profile
+# RUN echo "export HOME=/root" >> /etc/profile
+# RUN echo "export PYENV_ROOT=/opt/pyenv" >> /etc/profile
+# RUN echo "export PATH=/opt/pyenv/shims:/opt/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" >> /etc/profile
 # EXPOSE 22
 # CMD ["/usr/sbin/sshd", "-D"]
 ###
