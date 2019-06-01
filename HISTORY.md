@@ -1,12 +1,17 @@
 Release History
 ===============
 
+June 1, 2019
+------------
+- Added iperf3 and removed iperf2
+- Added SLR_Bot Python stats script for Security Lifecycle Review
+
 May 8, 2019
---------------
+-----------
 - Added Docker-Compose and commented out Dockerfile lines for capability to run as an SSHD service
 
 May 3, 2019
---------------
+-----------
 - Added support for Ansible module panos_set
 
 April 20, 2019

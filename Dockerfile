@@ -112,6 +112,11 @@ RUN apt-get install nmon -y
 # Example: Disk Queue size: iostat -x
 RUN apt-get install sysstat -y
 
+# iPerf3 ~2MB
+# iperf3 -s -p 8888 : Server listen on port 8888 (Run Docker with -p 8888:8888)
+# iperf3 -c w.x.y.z -p 8888 -n 1M  : Send to server w.x.y.z 1MB via TCP
+RUN apt-get install iperf3 -y
+
 # Aria2 Multi-threaded download ~6MB
 # Example download with 8 connections: aria2c -x 8 http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso 
 RUN apt-get install aria2 -y
@@ -138,12 +143,6 @@ RUN echo "mibs +PAN-COMMON-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-ENTITY-EXT-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-LC-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-TRAPS" >> /etc/snmp/snmp.conf
-
-
-# iPerf ~2MB
-# iperf -s -p 8888 : Server listen on port 8888 (Run Docker with -p 8888:8888)
-# iperf -c w.x.y.z -p 8888 -n 1M  : Send to server w.x.y.z 1MB via TCP
-RUN apt-get install iperf
 
 # PAN Configurator ~53MB
 RUN apt-get install php -y
@@ -224,6 +223,14 @@ RUN chmod +x /cps_bot/cps_bot.py
 # Fix script to run with PyEnv
 RUN sed -i 's/python/env python/' /cps_bot/cps_bot.py
 
+# SLR_Bot ~6MB
+# Security Lifecycle Review script to gather/export stats
+# Seems to run fine on Python 2.7.16... uncomment next 3 lines if you want Python 3.x
+#RUN pyenv global $PY3VER
+#RUN pip install requests
+RUN git clone https://github.com/nembery/SLR_Bot
+#RUN pyenv global $PY2VER
+
 # Microsoft Powershell (pwsh) with Azure Module ~60MB
 RUN wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.3/powershell_6.1.3-1.ubuntu.18.04_amd64.deb
 RUN apt-get install -y liblttng-ust0
@@ -286,7 +293,7 @@ RUN pip install requests-toolbelt
 
 
 # SSHD Service ~48MB
-### Un-comment the following 9 lines to run Pantools as a SSHD service for remote operation
+### Un-comment the following 10 lines to run Pantools as a SSHD service for remote operation
 # RUN apt-get install openssh-server -y
 # RUN mkdir /var/run/sshd
 # RUN echo 'root:paloalto' | chpasswd
