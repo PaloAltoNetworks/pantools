@@ -154,7 +154,7 @@ RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
 # Ansible ~76MB
 #RUN echo 'alias ansible="pyenv global 2.7.16; /opt/pyenv/shims/ansible"' >> /root/.bashrc
-ENV ANSIBLE_VERSION=2.7.9
+ENV ANSIBLE_VERSION=2.8.1
 RUN pip install ansible==${ANSIBLE_VERSION} \
         pandevice \
         pan-python \

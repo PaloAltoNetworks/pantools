@@ -4,10 +4,10 @@ PAN Tools Dockerfile
 This Dockerfile installs:
 
 ```
-* Ubuntu 18.04 Bionic
+* Ubuntu Bionic 18.04
 * Python 2.7.16
 * Python 3.6.8
-* Ansible 2.7.9
+* Ansible 2.8.1
 * Terraform 0.11.13
 * Azure CLI
 * AWS CLI

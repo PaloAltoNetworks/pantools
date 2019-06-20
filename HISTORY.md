@@ -1,6 +1,10 @@
 Release History
 ===============
 
+June 20, 2019
+-------------
+- Upgraded Ansible to 2.8.1 to support new Ansible Collections.
+
 June 1, 2019
 ------------
 - Added iperf3 and removed iperf2
