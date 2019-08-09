@@ -256,13 +256,15 @@ RUN pip install azure-cli
 #     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
 #RUN apt-get install azure-cli
 
-# Terraform 0.11 ~90MB
-ENV tf_ver=0.11.13
+# Terraform ~50MB
+# May have to delete old .terraform directory if using previous 0.11.x TF files... to use new provider
+# Also may have to run 'terraform 0.12upgrade' to convert TF files to the new format
+ENV tf_ver=0.12.6
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     unzip terraform.zip && \
-    install terraform /usr/local/bin/terraform-0.11 && \
+    install terraform /usr/local/bin/terraform-${tf_ver} && \
     rm -rf terraform.zip terraform && \
-    mv /usr/local/bin/terraform-0.11 /usr/local/bin/terraform
+    mv /usr/local/bin/terraform-${tf_ver} /usr/local/bin/terraform
 RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 

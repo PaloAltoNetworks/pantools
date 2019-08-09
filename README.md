@@ -8,7 +8,7 @@ This Dockerfile installs:
 * Python 2.7.16
 * Python 3.6.8
 * Ansible 2.8.1
-* Terraform 0.11.13
+* Terraform 0.12.6
 * Azure CLI
 * AWS CLI
 * Google SDK 240.0.0

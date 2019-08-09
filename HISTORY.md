@@ -1,6 +1,10 @@
 Release History
 ===============
 
+August 9, 2019
+--------------
+- Upgraded Terraform to 0.12.6  See Dockerfile comments for 0.11 to 0.12 upgrade notes.
+
 June 20, 2019
 -------------
 - Upgraded Ansible to 2.8.1 to support new Ansible Collections.
