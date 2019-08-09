@@ -1,0 +1,18 @@
+# Only needed when using Pantools as a remote service with SSHD
+
+version: '2'
+services:
+    pantools:
+        image: pantools
+        container_name: pantools
+
+        # SSH with: ssh -p 2222 root@w.x.y.z
+        ports:
+            - '2222:22'
+
+        # Maps the Present Working Directory to Container /pwd
+        volumes:
+            - "./:/pwd"
+
+        # Allows to automatically start with Docker
+        restart: always
