@@ -4,11 +4,11 @@ PAN Tools Dockerfile
 This Dockerfile installs:
 
 ```
-* Ubuntu 18.04 Bionic
+* Ubuntu Bionic 18.04
 * Python 2.7.16
 * Python 3.6.8
-* Ansible 2.7.9
-* Terraform 0.11.13
+* Ansible 2.8.1
+* Terraform 0.12.6
 * Azure CLI
 * AWS CLI
 * Google SDK 240.0.0
@@ -44,4 +44,9 @@ Within the container switch Python versions:
 ```php
 pyenv global 2.7.16
 pyenv global 3.6.8
+```
+
+Can run as a SSHD service by uncommenting out lines in the Dockerfile, rebuilding then running with:
+```php
+docker-compose up -d
 ```

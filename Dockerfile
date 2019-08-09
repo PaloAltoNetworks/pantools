@@ -112,6 +112,11 @@ RUN apt-get install nmon -y
 # Example: Disk Queue size: iostat -x
 RUN apt-get install sysstat -y
 
+# iPerf3 ~2MB
+# iperf3 -s -p 8888 : Server listen on port 8888 (Run Docker with -p 8888:8888)
+# iperf3 -c w.x.y.z -p 8888 -n 1M  : Send to server w.x.y.z 1MB via TCP
+RUN apt-get install iperf3 -y
+
 # Aria2 Multi-threaded download ~6MB
 # Example download with 8 connections: aria2c -x 8 http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso 
 RUN apt-get install aria2 -y
@@ -139,12 +144,6 @@ RUN echo "mibs +PAN-ENTITY-EXT-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-LC-MIB" >> /etc/snmp/snmp.conf
 RUN echo "mibs +PAN-TRAPS" >> /etc/snmp/snmp.conf
 
-
-# iPerf ~2MB
-# iperf -s -p 8888 : Server listen on port 8888 (Run Docker with -p 8888:8888)
-# iperf -c w.x.y.z -p 8888 -n 1M  : Send to server w.x.y.z 1MB via TCP
-RUN apt-get install iperf
-
 # PAN Configurator ~53MB
 RUN apt-get install php -y
 RUN apt-get install php7.2-curl -y
@@ -155,7 +154,7 @@ RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
 # Ansible ~76MB
 #RUN echo 'alias ansible="pyenv global 2.7.16; /opt/pyenv/shims/ansible"' >> /root/.bashrc
-ENV ANSIBLE_VERSION=2.7.9
+ENV ANSIBLE_VERSION=2.8.1
 RUN pip install ansible==${ANSIBLE_VERSION} \
         pandevice \
         pan-python \
@@ -168,6 +167,8 @@ RUN ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 RUN echo '[defaults]' >> /etc/ansible/ansible.cfg
 RUN echo 'library = /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/' >> /etc/ansible/ansible.cfg
 RUN ln -s /opt/pyenv/shims/python /usr/bin/python
+# Include panos_set Module
+RUN curl -L https://raw.githubusercontent.com/ansible/ansible/fb9720429119cd56a7dde6d06600a082b4ab19c3/lib/ansible/modules/network/panos/_panos_set.py -o /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/panos_set.py
 
 # NMap 7.70 ~28MB
 RUN curl -fL -o /tmp/nmap.tar.bz2 \
@@ -222,6 +223,14 @@ RUN chmod +x /cps_bot/cps_bot.py
 # Fix script to run with PyEnv
 RUN sed -i 's/python/env python/' /cps_bot/cps_bot.py
 
+# SLR_Bot ~6MB
+# Security Lifecycle Review script to gather/export stats
+# Seems to run fine on Python 2.7.16... uncomment next 3 lines if you want Python 3.x
+#RUN pyenv global $PY3VER
+#RUN pip install requests
+RUN git clone https://github.com/nembery/SLR_Bot
+#RUN pyenv global $PY2VER
+
 # Microsoft Powershell (pwsh) with Azure Module ~60MB
 RUN wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.3/powershell_6.1.3-1.ubuntu.18.04_amd64.deb
 RUN apt-get install -y liblttng-ust0
@@ -247,13 +256,15 @@ RUN pip install azure-cli
 #     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
 #RUN apt-get install azure-cli
 
-# Terraform 0.11 ~90MB
-ENV tf_ver=0.11.13
+# Terraform ~50MB
+# May have to delete old .terraform directory if using previous 0.11.x TF files... to use new provider
+# Also may have to run 'terraform 0.12upgrade' to convert TF files to the new format
+ENV tf_ver=0.12.6
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     unzip terraform.zip && \
-    install terraform /usr/local/bin/terraform-0.11 && \
+    install terraform /usr/local/bin/terraform-${tf_ver} && \
     rm -rf terraform.zip terraform && \
-    mv /usr/local/bin/terraform-0.11 /usr/local/bin/terraform
+    mv /usr/local/bin/terraform-${tf_ver} /usr/local/bin/terraform
 RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 
@@ -279,6 +290,26 @@ RUN pip install shodan
 RUN pip install requests-toolbelt
 
 
+### Un-comment following line to add local scripts directory and all sub-directories, if they exist
+# COPY scripts /scripts/
+
+
+# SSHD Service ~48MB
+### Un-comment the following 10 lines to run Pantools as a SSHD service for remote operation
+# RUN apt-get install openssh-server -y
+# RUN mkdir /var/run/sshd
+# RUN echo 'root:paloalto' | chpasswd
+# RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+### SSH into Docker ignores ENV variables... need to save into /etc/profile
+# RUN echo "export HOME=/root" >> /etc/profile
+# RUN echo "export PYENV_ROOT=/opt/pyenv" >> /etc/profile
+# RUN echo "export PATH=/opt/pyenv/shims:/opt/pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" >> /etc/profile
+# EXPOSE 22
+# CMD ["/usr/sbin/sshd", "-D"]
+###
+
+
 # Clean-up
 RUN apt-get -y autoremove && \
     apt-get -y autoclean && \ 
@@ -287,6 +318,3 @@ RUN apt-get -y autoremove && \
     rm -rf /root/.pip/cache && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt
-
-# Un-comment following line to add local scripts directory and all sub-directories, if they exist
-# COPY scripts /scripts/

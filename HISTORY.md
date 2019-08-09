@@ -1,6 +1,27 @@
 Release History
 ===============
 
+August 9, 2019
+--------------
+- Upgraded Terraform to 0.12.6  See Dockerfile comments for 0.11 to 0.12 upgrade notes.
+
+June 20, 2019
+-------------
+- Upgraded Ansible to 2.8.1 to support new Ansible Collections.
+
+June 1, 2019
+------------
+- Added iperf3 and removed iperf2
+- Added SLR_Bot Python stats script for Security Lifecycle Review
+
+May 8, 2019
+-----------
+- Added Docker-Compose and commented out Dockerfile lines for capability to run as an SSHD service
+
+May 3, 2019
+-----------
+- Added support for Ansible module panos_set
+
 April 20, 2019
 --------------
 - Added Midnight Commander File Manager
