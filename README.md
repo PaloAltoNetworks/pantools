@@ -10,6 +10,7 @@ This Dockerfile installs:
 * Ansible 2.8.1
 * Terraform 0.12.6
 * Azure CLI
+* Microsoft PowerShell 6.1.3 with Azure module
 * AWS CLI
 * Google SDK 240.0.0
 * PAN Configurator
