@@ -23,27 +23,26 @@ ENV HOME=/root PYENV_ROOT=/opt/pyenv PATH=/opt/pyenv/shims:/opt/pyenv/bin:$PATH
 RUN curl https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
 # Define Python Versions to use
+ENV PY3VER 3.7.4
 ENV PY2VER 2.7.16
-ENV PY3VER 3.6.8
+
+### Python 3 ~198MB
+# Need to install libffi-dev for Python 3.7 (not required for Python 3.6)
+RUN apt-get install libffi-dev
+RUN pyenv install $PY3VER
 
 ### Python 2 ~128MB
 RUN pyenv install $PY2VER
 
-### Python 3 ~183MB
-RUN pyenv install $PY3VER
-
-#Likely need to install libffi-dev when we want to move to Python 3.7 to get installed/working :)
-#RUN apt-get install libffi-dev
-#RUN pyenv install 3.7.3
-
-# Upgrade Python 3 PIP
-RUN pyenv global $PY3VER
-RUN pip3 install --upgrade pip
-
-# Upgrade Python 2 PIP and leave Python 2 Active/Default
+# Upgrade Python 2 PIP 
 RUN pyenv global $PY2VER
 RUN pip2 install --upgrade pip
 
+# Upgrade Python 3 PIP and leave Python 3 Active/Default
+RUN pyenv global $PY3VER
+RUN pip3 install --upgrade pip
+
+RUN pyenv global $PY3VER $PY2VER
 
 ###
 ### Other Network Utilities
@@ -152,23 +151,28 @@ RUN git clone https://github.com/swaschkut/pan-configurator/
 RUN echo 'include_path = ".:/pan-configurator"' >> /etc/php/7.2/cli/php.ini
 RUN cat /pan-configurator/utils/alias.sh >> /root/.bashrc
 
-# Ansible ~76MB
-#RUN echo 'alias ansible="pyenv global 2.7.16; /opt/pyenv/shims/ansible"' >> /root/.bashrc
-ENV ANSIBLE_VERSION=2.8.1
+# Ansible ~118MB
+ENV ANSIBLE_VERSION=2.8.5
 RUN pip install ansible==${ANSIBLE_VERSION} \
         pandevice \
         pan-python \
         xmltodict \
         jsonschema 
 RUN mkdir /etc/ansible
-RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg -O /etc/ansible/ansible.cfg
-RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/hosts -O /etc/ansible/hosts
-RUN ansible-galaxy install PaloAltoNetworks.paloaltonetworks
+#RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg -O /etc/ansible/ansible.cfg
+#RUN wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/hosts -O /etc/ansible/hosts
 RUN echo '[defaults]' >> /etc/ansible/ansible.cfg
+# To not need roles defined in Playbooks
 RUN echo 'library = /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/' >> /etc/ansible/ansible.cfg
-RUN ln -s /opt/pyenv/shims/python /usr/bin/python
+RUN echo 'roles_path = /root/.ansible/roles' >> /etc/ansible/ansible.cfg
+# Suppress Python warnings when running Playbooks
+RUN echo 'interpreter_python = auto_silent' >> /etc/ansible/ansible.cfg
+# To not need "-i hosts" when running Playbooks... "./hosts" should work... but doesn't for some reason... using fixed path
+RUN echo 'inventory = /pwd/hosts' >> /etc/ansible/ansible.cfg
+RUN ansible-galaxy install PaloAltoNetworks.paloaltonetworks
 # Include panos_set Module
 RUN curl -L https://raw.githubusercontent.com/ansible/ansible/fb9720429119cd56a7dde6d06600a082b4ab19c3/lib/ansible/modules/network/panos/_panos_set.py -o /root/.ansible/roles/PaloAltoNetworks.paloaltonetworks/library/panos_set.py
+RUN ln -s /opt/pyenv/shims/python /usr/bin/python
 
 # NMap 7.70 ~28MB
 RUN curl -fL -o /tmp/nmap.tar.bz2 \
@@ -259,7 +263,7 @@ RUN pip install azure-cli
 # Terraform ~50MB
 # May have to delete old .terraform directory if using previous 0.11.x TF files... to use new provider
 # Also may have to run 'terraform 0.12upgrade' to convert TF files to the new format
-ENV tf_ver=0.12.6
+ENV tf_ver=0.12.9
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     unzip terraform.zip && \
     install terraform /usr/local/bin/terraform-${tf_ver} && \
@@ -269,7 +273,7 @@ RUN echo 'alias terraform="/usr/local/bin/terraform"' >> /root/.bashrc
 RUN echo 'alias tf="/usr/local/bin/terraform"' >> /root/.bashrc
 
 # Google Cloud SDK ~140MB
-ENV GCLOUD_VERSION 240.0.0
+ENV GCLOUD_VERSION 263.0.0
 RUN curl --silent -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCLOUD_VERSION-linux-x86_64.tar.gz -o google-cloud-sdk.tar.gz \
  && tar xzf google-cloud-sdk.tar.gz \
  && rm google-cloud-sdk.tar.gz \

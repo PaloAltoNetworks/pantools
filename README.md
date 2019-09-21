@@ -5,13 +5,14 @@ This Dockerfile installs:
 
 ```
 * Ubuntu Bionic 18.04
+* Python 3.7.4
 * Python 2.7.16
-* Python 3.6.8
-* Ansible 2.8.1
-* Terraform 0.12.6
+* Ansible 2.8.5
+* Terraform 0.12.9
 * Azure CLI
+* Microsoft PowerShell 6.1.3 with Azure module
 * AWS CLI
-* Google SDK 240.0.0
+* Google SDK 263.0.0
 * PAN Configurator
 * GoPAN
 
@@ -42,8 +43,8 @@ docker run -it pantools
 
 Within the container switch Python versions:
 ```php
+pyenv global 3.7.4
 pyenv global 2.7.16
-pyenv global 3.6.8
 ```
 
 Can run as a SSHD service by uncommenting out lines in the Dockerfile, rebuilding then running with:

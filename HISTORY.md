@@ -1,9 +1,17 @@
 Release History
 ===============
 
+September 20, 2019
+------------------
+- Python 3.7.4 installed and now default instead of 2.6
+- Upgrade Ansible to 2.8.5
+- Fixed Ansible environment to properly path roles, libraries and inventory
+- Upgraded Terraform to 0.12.9
+- Upgraded Google SDK to 263.0.0
+
 August 9, 2019
 --------------
-- Upgraded Terraform to 0.12.6  See Dockerfile comments for 0.11 to 0.12 upgrade notes.
+- Upgraded Terraform to 0.12.6.  See Dockerfile comments for 0.11 to 0.12 upgrade notes.
 
 June 20, 2019
 -------------
